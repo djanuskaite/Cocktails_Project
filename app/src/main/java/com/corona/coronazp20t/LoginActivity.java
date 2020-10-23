@@ -24,14 +24,22 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //cia bus vygdomas kodas po batono paspaudimo
-                Toast.makeText(LoginActivity.this,
+               /* Toast.makeText(LoginActivity.this,
                         "Prisijungimo Vardas:"+usernametext.getText().toString()+"\n"+
                         "Slaptazodis:"+passwordtext.getText().toString(),
-                        Toast.LENGTH_SHORT).show();
-                //ketinimas pereiti i paieskos langa
-                Intent goToSearchActivity=new Intent(LoginActivity.this,//from
-                        SearchActivity.class);//to
-                startActivity(goToSearchActivity);//cia pereina
+                        Toast.LENGTH_SHORT).show(); */
+                if (Validation.isValidUsername(usernametext.getText().toString()))
+                {
+                    //ketinimas pereiti i paieskos langa
+                    Intent goToSearchActivity = new Intent(LoginActivity.this,//from
+                            SearchActivity.class);//to
+                    startActivity(goToSearchActivity);//cia pereina
+                }
+                else { //Kai duomenys neatinka reikalavimų
+                    usernametext.setError(getResources().getString(R.string.login_invalid_username));
+                    usernametext.requestFocus(); //Naudojamam laukely išmeta pranešimą
+                }
+
             }
         });
     }
