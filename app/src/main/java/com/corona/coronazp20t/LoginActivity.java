@@ -30,6 +30,14 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show(); */
                 if (Validation.isValidUsername(usernametext.getText().toString()))
                 {
+                    //konstruojamas objektas
+                    //public User(String username, String password, String email)
+                    User user=new User(usernametext.getText().toString(),passwordtext.getText().toString());
+                    Toast.makeText(LoginActivity.this,
+                            "Username:"+ user.getUsername()+"\n"+
+                                    "Password:"+user.getPassword()+"\n",
+                            Toast.LENGTH_SHORT).show();
+
                     //ketinimas pereiti i paieskos langa
                     Intent goToSearchActivity = new Intent(LoginActivity.this,//from
                             SearchActivity.class);//to
