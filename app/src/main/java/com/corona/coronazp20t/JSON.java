@@ -1,5 +1,7 @@
 package com.corona.coronazp20t;
 
+import android.support.constraint.solver.ArrayLinkedVariables;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +16,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class JSON {
+
+    private static ArrayLinkedVariables cocktailsList;
 
     private static String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -37,43 +41,39 @@ public class JSON {
     }
 
     public static JSONArray getJSONArray(JSONObject json) throws JSONException {
-        // removing from JSON all unnecessary information and leaving only covid19Stats array
-        int jsonLength = json.toString().length();
-        String covid19Stats = "{" + json.toString().substring(96, jsonLength) + "}";
 
-        // String to JSONObject
-        JSONObject jsonObject = new JSONObject(covid19Stats);
         //JSONObject to JSONArray
-        JSONArray jsonArray = jsonObject.getJSONArray("covid19Stats");
+        JSONArray jsonArray = json.getJSONArray("drinks");
 
         return jsonArray;
     }
 
-    public static ArrayList<Corona> getList(JSONArray jsonArray) throws JSONException {
-        ArrayList<Corona> covidList = new ArrayList<Corona>();
+    public static ArrayList<Cocktails> getList(JSONArray jsonArray, ArrayList<Cocktails> cocktailsList) throws JSONException {
+        cocktailsList = new ArrayList<Cocktails>();
         // Extract data from json and store into ArrayList as class objects
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject json_data = jsonArray.getJSONObject(i);
-            Corona corona = new Corona(
-                    json_data.getString("country"),
-                    json_data.getString("lastUpdate"),
-                    json_data.getString("keyId"),
-                    json_data.getInt("confirmed"),
-                    json_data.getInt("deaths")
+            // public Cocktails(int id, String name, String tags, String category, String glass)
+            Cocktails cocktails = new Cocktails(
+                    json_data.getString("idDrink"),
+                    json_data.getString("strDrink"),
+                    json_data.getString("strTags"),
+                    json_data.getString("strCategory"),
+                    json_data.getString("strGlass")
             );
-            covidList.add(corona);
+            cocktailsList.add(cocktails);
         }
-        return covidList;
+        return cocktailsList;
     }
 
-    public static ArrayList<Corona> getCoronaListByCountry(ArrayList<Corona> coronaList, String country) {
-        ArrayList<Corona> coronaListByCountry = new ArrayList<Corona>();
-        for (Corona corona : coronaList) {
-            if (corona.getKeyId().contains(country)) {
-                coronaListByCountry.add(corona);
+    public static ArrayList<Cocktails> getCocktailsByQuery(ArrayList<Cocktails> cocktailsList, String cocktailName) {
+        ArrayList<Cocktails> cocktailsListByCountry = new ArrayList<Cocktails>();
+        for (Cocktails cocktails : cocktailsList) {
+            if (cocktails.getName().contains(cocktailName)) {
+                cocktailsListByCountry.add(cocktails);
             }
         }
-        return coronaListByCountry;
+        return cocktailsListByCountry;
     }
 
 }
